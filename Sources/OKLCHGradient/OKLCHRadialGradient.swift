@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct OKLCHRadialGradient: ShapeStyle, View {
+public struct OKLCHRadialGradient: ShapeStyle, View, Sendable {
     let stops: [Gradient.Stop]
     let center: UnitPoint
     let startRadius: CGFloat

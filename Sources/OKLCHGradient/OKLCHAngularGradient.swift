@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct OKLCHAngularGradient: ShapeStyle, View {
+public struct OKLCHAngularGradient: ShapeStyle, View, Sendable {
     let stops: [Gradient.Stop]
     let center: UnitPoint
     let startAngle: Angle
