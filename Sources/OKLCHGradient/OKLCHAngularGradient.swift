@@ -27,6 +27,27 @@ public struct OKLCHAngularGradient: ShapeStyle, View, Sendable {
         self.endAngle = endAngle
     }
     
+    public init(colors: [Color], center: UnitPoint, angle: Angle = .zero) {
+        self.stops = colors.evenlyDistributedStops
+        self.center = center
+        self.startAngle = angle
+        self.endAngle = angle + .degrees(360)
+    }
+    
+    public init(stops: [Gradient.Stop], center: UnitPoint, angle: Angle = .zero) {
+        self.stops = stops
+        self.center = center
+        self.startAngle = angle
+        self.endAngle = angle + .degrees(360)
+    }
+    
+    public init(gradient: Gradient, center: UnitPoint, angle: Angle = .zero) {
+        self.stops = gradient.stops
+        self.center = center
+        self.startAngle = angle
+        self.endAngle = angle + .degrees(360)
+    }
+    
     public func resolve(in environment: EnvironmentValues) -> some ShapeStyle {
         ShaderLibrary.bundle(Bundle.module).oklchAngularGradient(
             .boundingRect,

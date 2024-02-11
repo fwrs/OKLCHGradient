@@ -130,7 +130,7 @@ half4 oklchToOKLAB(half4 oklch) {
     float startRadius,
     float endRadius
 ) {
-    half2 diff = half2(position.x - center.x - bounds.z * center.x, position.y - center.y - bounds.w * center.y);
+    half2 diff = half2(position.x - bounds.z * center.x, position.y - bounds.w * center.y);
     half distanceFromCenter = length(diff);
     half progress = clamp((distanceFromCenter - half(startRadius)) / half(endRadius - startRadius), 0.0h, 1.0h);
     progress = clamp(progress, half(stops[0]), half(stops[stopCount - 1]));
@@ -165,10 +165,52 @@ half4 oklchToOKLAB(half4 oklch) {
     float minAngle,
     float maxAngle
 ) {
-    half2 diff = half2(position.x - center.x - bounds.z * center.x, position.y - center.y - bounds.w * center.y);
-    half angle = atan2(diff.y, diff.x);
+    half2 uv = half2(position.x / bounds.z, position.y / bounds.w);
+    half2 diff = half2(center.x - uv.x, center.y - uv.y);
+    half angle = atan2(diff.y, diff.x) + M_PI_F;
+    half midAngle = (minAngle + maxAngle) / 2.0 + M_PI_F;
+    if (angle < minAngle) { angle += 2.0 * M_PI_F; }
+    if (angle > maxAngle && angle < midAngle) { angle -= 2.0 * M_PI_F; }
+    if (angle > maxAngle && angle > midAngle) { angle -= 4.0 * M_PI_F; }
     if (angle < 0.0) { angle += 2.0 * M_PI_F; }
     half progress = saturate((angle - minAngle) / (maxAngle - minAngle));
+    progress = clamp(progress, half(stops[0]), half(stops[stopCount - 1]));
+    int startIndex = 0;
+    int endIndex = stopCount - 1;
+    
+    for (int i = 0; i < stopCount - 1; ++i) {
+        if (progress <= stops[i + 1]) {
+            startIndex = i;
+            endIndex = i + 1;
+            break;
+        }
+    }
+    
+    half4 startColorInsRGB = colors[startIndex];
+    half4 endColorInsRGB = colors[endIndex];
+    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
+    half4 startColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(startColorInsRGB)));
+    half4 endColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(endColorInsRGB)));
+    
+    return linearsRGBTosRGB(oklabToLinearsRGB(oklchToOKLAB(mix(startColorInOKLCH, endColorInOKLCH, lerpFactor))));
+}
+
+[[ stitchable ]] half4 oklchEllipticalGradient(
+    float2 position,
+    float4 bounds,
+    device const half4 *colors,
+    int colorCount,
+    device const float *stops,
+    int stopCount,
+    float2 center,
+    float startRadiusFraction,
+    float endRadiusFraction
+) {
+    half2 uv = half2(position.x / bounds.z, position.y / bounds.w);
+    half2 diff = half2(center.x - uv.x, center.y - uv.y);
+    half distanceFromCenter = length(diff);
+    half delta = half(endRadiusFraction - startRadiusFraction);
+    half progress = clamp((distanceFromCenter - half(startRadiusFraction)) / delta, 0.0h, 1.0h);
     progress = clamp(progress, half(stops[0]), half(stops[stopCount - 1]));
     int startIndex = 0;
     int endIndex = stopCount - 1;
