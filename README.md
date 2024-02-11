@@ -8,7 +8,7 @@ Install using SPM:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/fwrs/OKLCHGradient.git", .upToNextMajor(from: "1.0.6"))
+    .package(url: "https://github.com/fwrs/OKLCHGradient.git", .upToNextMajor(from: "1.0.7"))
 ]
 ```
 
@@ -38,7 +38,7 @@ Rectangle()
 
 And enjoy the difference:
 
-<img src="Misc/Demonstration.png" alt="Screenshot comparing a regular SwiftUI gradient to an OKLCH gradient. The regular gradient utilizes a grey color as an intermediate between blue and yellow colors, while OKLCH uses green, which is the color positioned between blue and yellow on a standard color wheel." width="350px" />
+<img src="Misc/Demonstration.png" alt="Screenshot comparing a regular SwiftUI gradient to an OKLCH gradient. The regular gradient utilizes a grey color as an intermediate between blue and yellow colors, while OKLCH uses green, which is the color positioned between blue and yellow on a standard color wheel." width="351px" />
 
 > [!NOTE]
 > At the moment it's not possible to pass AnyGradient structs to OKLCH gradients because there isn't a way to read color stops from an AnyGradient using public APIs. This functionality is limited to Apple's own built-in gradients.
