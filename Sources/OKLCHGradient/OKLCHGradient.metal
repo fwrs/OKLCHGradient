@@ -93,8 +93,8 @@ half4 oklchToOKLAB(half4 oklch) {
     float2 endPosition
 ) {
     half2 direction = half2(normalize(endPosition - startPosition));
-    half2 fromStart = half2(position - startPosition);
-    half2 normalized = half2(fromStart.x / bounds.z, fromStart.y / bounds.w);
+    half2 distanceFromStart = half2(position - startPosition);
+    half2 normalized = half2(distanceFromStart.x / bounds.z, distanceFromStart.y / bounds.w);
     half progress = clamp(dot(normalized, direction), 0.0h, 1.0h);
     int index = int(floor(progress * (colorCount - 1)));
     half4 startColorInsRGB = colors[index];
@@ -115,9 +115,32 @@ half4 oklchToOKLAB(half4 oklch) {
     float startRadius,
     float endRadius
 ) {
-    half2 diff = half2(position.x - center.x - bounds.z * 0.5, position.y - center.y - bounds.w * 0.5);
+    half2 diff = half2(position.x - center.x - bounds.z * center.x, position.y - center.y - bounds.w * center.y);
     half distanceFromCenter = length(diff);
     half progress = clamp((distanceFromCenter - half(startRadius)) / half(endRadius - startRadius), 0.0h, 1.0h);
+    int index = int(floor(progress * (colorCount - 1)));
+    half4 startColorInsRGB = colors[index];
+    half4 endColorInsRGB = colors[min(index + 1, colorCount - 1)];
+    half lerpFactor = fract(progress * (colorCount - 1));
+    half4 startColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(startColorInsRGB)));
+    half4 endColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(endColorInsRGB)));
+    
+    return linearsRGBTosRGB(oklabToLinearsRGB(oklchToOKLAB(mix(startColorInOKLCH, endColorInOKLCH, lerpFactor))));
+}
+
+[[ stitchable ]] half4 oklchAngularGradient(
+    float2 position,
+    float4 bounds,
+    device const half4 *colors,
+    int colorCount,
+    float2 center,
+    float minAngle,
+    float maxAngle
+) {
+    half2 diff = half2(position.x - center.x - bounds.z * center.x, position.y - center.y - bounds.w * center.y);
+    half angle = atan2(diff.y, diff.x);
+    if (angle < 0.0) { angle += 2.0 * M_PI_F; }
+    float progress = saturate((angle - minAngle) / (maxAngle - minAngle));
     int index = int(floor(progress * (colorCount - 1)));
     half4 startColorInsRGB = colors[index];
     half4 endColorInsRGB = colors[min(index + 1, colorCount - 1)];
