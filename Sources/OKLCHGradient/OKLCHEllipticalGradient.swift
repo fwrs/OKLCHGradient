@@ -6,21 +6,21 @@ public struct OKLCHEllipticalGradient: ShapeStyle, View, Sendable {
     let startRadiusFraction: CGFloat
     let endRadiusFraction: CGFloat
     
-    public init(colors: [Color], center: UnitPoint, startRadiusFraction: CGFloat, endRadiusFraction: CGFloat) {
+    public init(colors: [Color], center: UnitPoint = .center, startRadiusFraction: CGFloat = 0, endRadiusFraction: CGFloat = 0.5) {
         self.stops = colors.evenlyDistributedStops
         self.center = center
         self.startRadiusFraction = startRadiusFraction
         self.endRadiusFraction = endRadiusFraction
     }
     
-    public init(stops: [Gradient.Stop], center: UnitPoint, startRadiusFraction: CGFloat, endRadiusFraction: CGFloat) {
+    public init(stops: [Gradient.Stop], center: UnitPoint = .center, startRadiusFraction: CGFloat = 0, endRadiusFraction: CGFloat = 0.5) {
         self.stops = stops
         self.center = center
         self.startRadiusFraction = startRadiusFraction
         self.endRadiusFraction = endRadiusFraction
     }
     
-    public init(gradient: Gradient, center: UnitPoint, startRadiusFraction: CGFloat, endRadiusFraction: CGFloat) {
+    public init(gradient: Gradient, center: UnitPoint = .center, startRadiusFraction: CGFloat = 0, endRadiusFraction: CGFloat = 0.5) {
         self.stops = gradient.stops
         self.center = center
         self.startRadiusFraction = startRadiusFraction
@@ -36,5 +36,19 @@ public struct OKLCHEllipticalGradient: ShapeStyle, View, Sendable {
             .float(startRadiusFraction),
             .float(endRadiusFraction)
         )
+    }
+}
+
+public extension ShapeStyle where Self == OKLCHEllipticalGradient {
+    static func oklchEllipticalGradient(_ gradient: Gradient, center: UnitPoint = .center, startRadiusFraction: CGFloat = 0, endRadiusFraction: CGFloat = 0.5) -> OKLCHEllipticalGradient {
+        OKLCHEllipticalGradient(gradient: gradient, center: center, startRadiusFraction: startRadiusFraction, endRadiusFraction: endRadiusFraction)
+    }
+    
+    static func oklchEllipticalGradient(colors: [Color], center: UnitPoint = .center, startRadiusFraction: CGFloat = 0, endRadiusFraction: CGFloat = 0.5) -> OKLCHEllipticalGradient {
+        OKLCHEllipticalGradient(colors: colors, center: center, startRadiusFraction: startRadiusFraction, endRadiusFraction: endRadiusFraction)
+    }
+    
+    static func oklchEllipticalGradient(stops: [Gradient.Stop], center: UnitPoint = .center, startRadiusFraction: CGFloat = 0, endRadiusFraction: CGFloat = 0.5) -> OKLCHEllipticalGradient {
+        OKLCHEllipticalGradient(stops: stops, center: center, startRadiusFraction: startRadiusFraction, endRadiusFraction: endRadiusFraction)
     }
 }

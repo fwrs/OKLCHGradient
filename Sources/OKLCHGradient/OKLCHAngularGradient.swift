@@ -20,7 +20,7 @@ public struct OKLCHAngularGradient: ShapeStyle, View, Sendable {
         self.endAngle = endAngle
     }
     
-    public init(gradient: Gradient, center: UnitPoint, startAngle: Angle, endAngle: Angle) {
+    public init(gradient: Gradient, center: UnitPoint, startAngle: Angle = .zero, endAngle: Angle = .zero) {
         self.stops = gradient.stops
         self.center = center
         self.startAngle = startAngle
@@ -57,5 +57,33 @@ public struct OKLCHAngularGradient: ShapeStyle, View, Sendable {
             .float(startAngle.radians),
             .float(endAngle.radians)
         )
+    }
+}
+
+public extension ShapeStyle where Self == OKLCHAngularGradient {
+    static func oklchAngularGradient(_ gradient: Gradient, center: UnitPoint, startAngle: Angle, endAngle: Angle) -> OKLCHAngularGradient {
+        OKLCHAngularGradient(gradient: gradient, center: center, startAngle: startAngle, endAngle: endAngle)
+    }
+    
+    static func oklchAngularGradient(colors: [Color], center: UnitPoint, startAngle: Angle, endAngle: Angle) -> OKLCHAngularGradient {
+        OKLCHAngularGradient(colors: colors, center: center, startAngle: startAngle, endAngle: endAngle)
+    }
+    
+    static func oklchAngularGradient(stops: [Gradient.Stop], center: UnitPoint, startAngle: Angle, endAngle: Angle) -> OKLCHAngularGradient {
+        OKLCHAngularGradient(stops: stops, center: center, startAngle: startAngle, endAngle: endAngle)
+    }
+}
+
+public extension ShapeStyle where Self == OKLCHAngularGradient {
+    static func oklchConicGradient(_ gradient: Gradient, center: UnitPoint, angle: Angle = .zero) -> OKLCHAngularGradient {
+        OKLCHAngularGradient(gradient: gradient, center: center, angle: angle)
+    }
+    
+    static func oklchConicGradient(colors: [Color], center: UnitPoint, angle: Angle = .zero) -> OKLCHAngularGradient {
+        OKLCHAngularGradient(colors: colors, center: center, angle: angle)
+    }
+    
+    static func oklchConicGradient(stops: [Gradient.Stop], center: UnitPoint, angle: Angle = .zero) -> OKLCHAngularGradient {
+        OKLCHAngularGradient(stops: stops, center: center, angle: angle)
     }
 }

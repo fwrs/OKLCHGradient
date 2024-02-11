@@ -38,3 +38,17 @@ public struct OKLCHRadialGradient: ShapeStyle, View, Sendable {
         )
     }
 }
+
+public extension ShapeStyle where Self == OKLCHRadialGradient {
+    static func oklchRadialGradient(_ gradient: Gradient, center: UnitPoint, startRadius: CGFloat, endRadius: CGFloat) -> OKLCHRadialGradient {
+        OKLCHRadialGradient(gradient: gradient, center: center, startRadius: startRadius, endRadius: endRadius)
+    }
+    
+    static func oklchRadialGradient(colors: [Color], center: UnitPoint, startRadius: CGFloat, endRadius: CGFloat) -> OKLCHRadialGradient {
+        OKLCHRadialGradient(colors: colors, center: center, startRadius: startRadius, endRadius: endRadius)
+    }
+    
+    static func oklchRadialGradient(stops: [Gradient.Stop], center: UnitPoint, startRadius: CGFloat, endRadius: CGFloat) -> OKLCHRadialGradient {
+        OKLCHRadialGradient(stops: stops, center: center, startRadius: startRadius, endRadius: endRadius)
+    }
+}

@@ -33,3 +33,17 @@ public struct OKLCHLinearGradient: ShapeStyle, View, Sendable {
         )
     }
 }
+
+public extension ShapeStyle where Self == OKLCHLinearGradient {
+    static func oklchLinearGradient(_ gradient: Gradient, startPoint: UnitPoint, endPoint: UnitPoint) -> OKLCHLinearGradient {
+        OKLCHLinearGradient(gradient: gradient, startPoint: startPoint, endPoint: endPoint)
+    }
+    
+    static func oklchLinearGradient(colors: [Color], startPoint: UnitPoint, endPoint: UnitPoint) -> OKLCHLinearGradient {
+        OKLCHLinearGradient(colors: colors, startPoint: startPoint, endPoint: endPoint)
+    }
+    
+    static func oklchLinearGradient(stops: [Gradient.Stop], startPoint: UnitPoint, endPoint: UnitPoint) -> OKLCHLinearGradient {
+        OKLCHLinearGradient(stops: stops, startPoint: startPoint, endPoint: endPoint)
+    }
+}
