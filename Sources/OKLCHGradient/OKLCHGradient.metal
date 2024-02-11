@@ -89,6 +89,8 @@ half4 oklchToOKLAB(half4 oklch) {
     float4 bounds,
     device const half4 *colors,
     int colorCount,
+    device const float *stops,
+    int stopCount,
     float2 startPosition,
     float2 endPosition
 ) {
@@ -96,10 +98,21 @@ half4 oklchToOKLAB(half4 oklch) {
     half2 distanceFromStart = half2(position - startPosition);
     half2 normalized = half2(distanceFromStart.x / bounds.z, distanceFromStart.y / bounds.w);
     half progress = clamp(dot(normalized, direction), 0.0h, 1.0h);
-    int index = int(floor(progress * (colorCount - 1)));
-    half4 startColorInsRGB = colors[index];
-    half4 endColorInsRGB = colors[min(index + 1, colorCount - 1)];
-    half lerpFactor = fract(progress * (colorCount - 1));
+    progress = clamp(progress, half(stops[0]), half(stops[stopCount - 1]));
+    int startIndex = 0;
+    int endIndex = stopCount - 1;
+    
+    for (int i = 0; i < stopCount - 1; ++i) {
+        if (progress <= stops[i + 1]) {
+            startIndex = i;
+            endIndex = i + 1;
+            break;
+        }
+    }
+    
+    half4 startColorInsRGB = colors[startIndex];
+    half4 endColorInsRGB = colors[endIndex];
+    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
     half4 startColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(startColorInsRGB)));
     half4 endColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(endColorInsRGB)));
     
@@ -111,6 +124,8 @@ half4 oklchToOKLAB(half4 oklch) {
     float4 bounds,
     device const half4 *colors,
     int colorCount,
+    device const float *stops,
+    int stopCount,
     float2 center,
     float startRadius,
     float endRadius
@@ -118,10 +133,21 @@ half4 oklchToOKLAB(half4 oklch) {
     half2 diff = half2(position.x - center.x - bounds.z * center.x, position.y - center.y - bounds.w * center.y);
     half distanceFromCenter = length(diff);
     half progress = clamp((distanceFromCenter - half(startRadius)) / half(endRadius - startRadius), 0.0h, 1.0h);
-    int index = int(floor(progress * (colorCount - 1)));
-    half4 startColorInsRGB = colors[index];
-    half4 endColorInsRGB = colors[min(index + 1, colorCount - 1)];
-    half lerpFactor = fract(progress * (colorCount - 1));
+    progress = clamp(progress, half(stops[0]), half(stops[stopCount - 1]));
+    int startIndex = 0;
+    int endIndex = stopCount - 1;
+    
+    for (int i = 0; i < stopCount - 1; ++i) {
+        if (progress <= stops[i + 1]) {
+            startIndex = i;
+            endIndex = i + 1;
+            break;
+        }
+    }
+    
+    half4 startColorInsRGB = colors[startIndex];
+    half4 endColorInsRGB = colors[endIndex];
+    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
     half4 startColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(startColorInsRGB)));
     half4 endColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(endColorInsRGB)));
     
@@ -133,6 +159,8 @@ half4 oklchToOKLAB(half4 oklch) {
     float4 bounds,
     device const half4 *colors,
     int colorCount,
+    device const float *stops,
+    int stopCount,
     float2 center,
     float minAngle,
     float maxAngle
@@ -140,11 +168,22 @@ half4 oklchToOKLAB(half4 oklch) {
     half2 diff = half2(position.x - center.x - bounds.z * center.x, position.y - center.y - bounds.w * center.y);
     half angle = atan2(diff.y, diff.x);
     if (angle < 0.0) { angle += 2.0 * M_PI_F; }
-    float progress = saturate((angle - minAngle) / (maxAngle - minAngle));
-    int index = int(floor(progress * (colorCount - 1)));
-    half4 startColorInsRGB = colors[index];
-    half4 endColorInsRGB = colors[min(index + 1, colorCount - 1)];
-    half lerpFactor = fract(progress * (colorCount - 1));
+    half progress = saturate((angle - minAngle) / (maxAngle - minAngle));
+    progress = clamp(progress, half(stops[0]), half(stops[stopCount - 1]));
+    int startIndex = 0;
+    int endIndex = stopCount - 1;
+    
+    for (int i = 0; i < stopCount - 1; ++i) {
+        if (progress <= stops[i + 1]) {
+            startIndex = i;
+            endIndex = i + 1;
+            break;
+        }
+    }
+    
+    half4 startColorInsRGB = colors[startIndex];
+    half4 endColorInsRGB = colors[endIndex];
+    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
     half4 startColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(startColorInsRGB)));
     half4 endColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(endColorInsRGB)));
     

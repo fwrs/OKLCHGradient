@@ -8,7 +8,7 @@ Install using SPM:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/fwrs/OKLCHGradient.git", .upToNextMajor(from: "1.0.2"))
+    .package(url: "https://github.com/fwrs/OKLCHGradient.git", .upToNextMajor(from: "1.0.3"))
 ]
 ```
 
