@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct OKLCHLinearGradient: ShapeStyle {
+public struct OKLCHLinearGradient: ShapeStyle, View {
     let colors: [Color]
     let startPoint: UnitPoint
     let endPoint: UnitPoint

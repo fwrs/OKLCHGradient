@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct OKLCHAngularGradient: ShapeStyle {
+public struct OKLCHAngularGradient: ShapeStyle, View {
     let colors: [Color]
     let center: UnitPoint
     let startAngle: Angle
