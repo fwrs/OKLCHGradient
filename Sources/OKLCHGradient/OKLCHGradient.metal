@@ -110,9 +110,16 @@ half4 oklchToOKLAB(half4 oklch) {
         }
     }
     
+    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
+    
+    if (colorCount == 1 || stopCount == 1) {
+        startIndex = 0;
+        endIndex = 0;
+        lerpFactor = 0.5;
+    }
+    
     half4 startColorInsRGB = colors[startIndex];
     half4 endColorInsRGB = colors[endIndex];
-    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
     half4 startColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(startColorInsRGB)));
     half4 endColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(endColorInsRGB)));
     
@@ -145,9 +152,16 @@ half4 oklchToOKLAB(half4 oklch) {
         }
     }
     
+    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
+    
+    if (colorCount == 1 || stopCount == 1) {
+        startIndex = 0;
+        endIndex = 0;
+        lerpFactor = 0.5;
+    }
+    
     half4 startColorInsRGB = colors[startIndex];
     half4 endColorInsRGB = colors[endIndex];
-    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
     half4 startColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(startColorInsRGB)));
     half4 endColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(endColorInsRGB)));
     
@@ -186,9 +200,16 @@ half4 oklchToOKLAB(half4 oklch) {
         }
     }
     
+    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
+    
+    if (colorCount == 1 || stopCount == 1) {
+        startIndex = 0;
+        endIndex = 0;
+        lerpFactor = 0.5;
+    }
+    
     half4 startColorInsRGB = colors[startIndex];
     half4 endColorInsRGB = colors[endIndex];
-    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
     half4 startColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(startColorInsRGB)));
     half4 endColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(endColorInsRGB)));
     
@@ -223,9 +244,16 @@ half4 oklchToOKLAB(half4 oklch) {
         }
     }
     
+    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
+    
+    if (colorCount == 1 || stopCount == 1) {
+        startIndex = 0;
+        endIndex = 0;
+        lerpFactor = 0.5;
+    }
+    
     half4 startColorInsRGB = colors[startIndex];
     half4 endColorInsRGB = colors[endIndex];
-    half lerpFactor = (progress - stops[startIndex]) / (stops[endIndex] - stops[startIndex]);
     half4 startColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(startColorInsRGB)));
     half4 endColorInOKLCH = oklabToOKLCH(linearsRGBToOKLAB(sRGBToLinearsRGB(endColorInsRGB)));
     
